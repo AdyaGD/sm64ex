@@ -253,6 +253,7 @@ void play_sound_if_no_flag(struct MarioState *m, u32 soundBits, u32 flags) {
 /**
  * Plays a jump sound if one has not been played since the last action change.
  */
+ 
 void play_mario_jump_sound(struct MarioState *m) {
     if (!(m->flags & MARIO_MARIO_SOUND_PLAYED)) {
 #ifndef VERSION_JP
@@ -875,11 +876,18 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             set_mario_y_vel_based_on_fspeed(m, 30.0f, 0.0f);
             m->marioObj->oMarioLongJumpIsSlow = m->forwardVel > 16.0f ? FALSE : TRUE;
 
-            //! (BLJ's) This properly handles long jumps from getting forward speed with
-            //  too much velocity, but misses backwards longs allowing high negative speeds.
+            //  This properly handles long jumps from getting forward speed with
+            //  too much velocity.
             if ((m->forwardVel *= 1.5f) > 48.0f) {
                 m->forwardVel = 48.0f;
             }
+			
+			//! BLJ fix
+			if (m->forwardVel < -25.0f) {
+                m->forwardVel = -25.0f;
+            }
+			//! end of the BLJ fix
+			
             break;
 
         case ACT_SLIDE_KICK:
@@ -1060,7 +1068,8 @@ s32 set_jump_from_landing(struct MarioState *m) {
                         set_mario_action(m, ACT_FLYING_TRIPLE_JUMP, 0);
                     } else if (m->forwardVel > 20.0f) {
                         set_mario_action(m, ACT_TRIPLE_JUMP, 0);
-                    } else {
+					}
+					else {
                         set_mario_action(m, ACT_JUMP, 0);
                     }
                     break;
@@ -1532,7 +1541,8 @@ void update_mario_health(struct MarioState *m) {
         }
 
         // Play a noise to alert the player when Mario is close to drowning.
-        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300)) {
+        if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && !((m->flags & (MARIO_METAL_CAP))
+                > 0)) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gDefaultSoundArgs);
             if (!gRumblePakTimer) {
                 gRumblePakTimer = 36;

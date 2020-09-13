@@ -28,6 +28,7 @@ void bobomb_spawn_coin(void) {
 }
 
 void bobomb_act_explode(void) {
+	cur_obj_become_intangible();
     struct Object *explosion;
     if (o->oTimer < 5)
         cur_obj_scale(1.0 + (f32) o->oTimer / 5.0);
@@ -98,6 +99,7 @@ void bobomb_act_chase_mario(void) {
 }
 
 void bobomb_act_launched(void) {
+	cur_obj_become_intangible();
     s16 collisionFlags = 0;
     collisionFlags = object_step();
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == OBJ_COL_FLAG_GROUNDED)
