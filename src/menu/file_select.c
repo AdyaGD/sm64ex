@@ -92,7 +92,7 @@ static f32 sCursorPos[] = {0, 0};
 // Determines which graphic to use for the cursor.
 static s16 sCursorClickingTimer = 0;
 
-// Equal to sCursorPos if the cursor gets clicked, {-10000, -10000} otherwise.
+// Equal to sCursorPos iff the cursor gets clicked, {-10000, -10000} otherwise.
 static s16 sClickPos[] = {-10000, -10000};
 
 // Used for determining which file has been selected during copying and erasing.
@@ -2565,7 +2565,7 @@ void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
     u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
     s8 starCount = save_file_get_course_star_count(fileIndex, courseIndex);
     // Don't count 100 coin star
-    if (stars & (1 << 6)) {
+    if (stars & (1 << 7)) {
         starCount--;
     }
     // Add 1 star character for every star collected
