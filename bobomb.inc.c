@@ -34,7 +34,7 @@ void bobomb_act_explode(void) {
         cur_obj_scale(1.0 + (f32) o->oTimer / 5.0);
     else {
         explosion = spawn_object(o, MODEL_EXPLOSION, bhvExplosion);
-        explosion->oGraphYOffset += 300.0f;
+        explosion->oGraphYOffset += 100.0f;
 
         bobomb_spawn_coin();
         create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
